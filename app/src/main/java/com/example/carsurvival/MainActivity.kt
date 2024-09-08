@@ -7,44 +7,43 @@ import com.google.android.material.floatingactionbutton.ExtendedFloatingActionBu
 import android.widget.RelativeLayout
 import android.os.Handler
 import android.os.Looper
+import com.google.android.material.imageview.ShapeableImageView
 import kotlin.random.Random
 class MainActivity : AppCompatActivity() {
 
     private lateinit var car: Car
-//the obstacles:
-
-    private val obstacleList = mutableListOf<Obstacle>() // List to hold obstacles
-    private lateinit var mainLayout: RelativeLayout
     private val handler = Handler(Looper.getMainLooper())
+    private lateinit var first_obstacle: Obstacle
+    private lateinit var second_obstacle: Obstacle
+    private lateinit var third_obstacle: Obstacle
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        mainLayout = findViewById(R.id.main)
         // Find views using findViewById
         val carView = findViewById<ImageView>(R.id.imageView4)
         val leftButton = findViewById<ExtendedFloatingActionButton>(R.id.floatingActionButton)
         val rightButton = findViewById<ExtendedFloatingActionButton>(R.id.floatingActionButton2)
+        val mainLayout = findViewById<RelativeLayout>(R.id.main) //the relative layout from the xml file
 
         // Get screen width
         val screenWidth = resources.displayMetrics.widthPixels
 
 
 
-
-
-
-
-
-
-
-
-
-
-
         // Initialize the Car object with 3 lanes and pass the car's ImageView
         car = Car(carView, 3)
+        //define each obstacle according to its id in the xml layout
+        val obstacleView5 = findViewById<ShapeableImageView>(R.id.imageView5)
+        val obstacleView6 = findViewById<ShapeableImageView>(R.id.imageView6)
+        val obstacleView7 = findViewById<ShapeableImageView>(R.id.imageView7)
+
+        //declare each obstacle
+        first_obstacle = Obstacle(obstacleView5, 0,  screenWidth / 3f)
+        second_obstacle = Obstacle(obstacleView6, 1, screenWidth / 3f )
+        third_obstacle = Obstacle(obstacleView7, 2,  screenWidth / 3f)
 
 
 
@@ -62,54 +61,52 @@ class MainActivity : AppCompatActivity() {
             car.moveRight()
         }
 
-
-        // Add obstacles
-        addObstacles(screenWidth)
-
-        // Start moving the obstacles
-        startObstacleMovement()
+        //start the movement of the obstacles in random way on the scnreen
+        mainLayout.post {
+            val layoutHeight = mainLayout.height
+            start_movement(layoutHeight)
+        }
     }
 
-    private fun addObstacles(screenWidth: Int) {
-        // Add obstacles to each lane
-        addObstacleInLane(0, screenWidth) // Left lane
-        addObstacleInLane(1, screenWidth) // Center lane
-        addObstacleInLane(2, screenWidth) // Right lane
+    private fun start_movement(height: Int) {
+
+        val obstacle_speed = 55
+        val time_update = 50L
+        val random_value = Random(System.currentTimeMillis())
+
+        //moving each obstacle:
+        handler.postDelayed({
+            move(first_obstacle, obstacle_speed, height, time_update)
+        }, random_value.nextLong(0, 2000)) // Random delay between 0 and 2 seconds
+
+        // Start moving obstacle 2
+        handler.postDelayed({
+            move(second_obstacle, obstacle_speed, height, time_update)
+        }, random_value.nextLong(500, 3000)) // Random delay between 1 and 3 seconds
+
+        // Start moving obstacle 3
+        handler.postDelayed({
+            move(third_obstacle, obstacle_speed, height, time_update)
+        }, random_value.nextLong(1000, 4000)) // Random delay between 2 and 4 seconds
+
     }
 
-    private fun addObstacleInLane(lane: Int, screenWidth: Int) {
-        // Create and position an obstacle in the given lane
-        val obstacle = Obstacle( lane, screenWidth / 3f, this)
-        mainLayout.addView(obstacle.getView()) // Add the obstacle to the main layout
-        obstacleList.add(obstacle) // Add to list for managing movement
-    }
-
-    private fun startObstacleMovement() {
-        // Handler to move the obstacles down the screen at regular intervals
-        val speed = 10 // Speed of obstacle movement
-        val updateInterval = 50L // Time interval (in milliseconds)
-
-        handler.post(object : Runnable {
-            override fun run() {
-                for (obstacle in obstacleList) {
-                    // Move each obstacle down
-                    obstacle.move(speed)
-
-                    // Check if the obstacle is out of the screen
-                    if (obstacle.check_isValid_position(mainLayout.height)) {
-                        obstacle.reset_view() // Reset position if out of view
-                    }
-
-                    // Optional: Collision detection (can be implemented later)
-                }
-
-                // Repeat the obstacle movement
-                handler.postDelayed(this, updateInterval)
+    private fun move(obstacle: Obstacle, obstacleSpeed: Int, height: Int, time_update: Long) {
+    handler.post(object: Runnable {
+        override fun run(){
+            obstacle.move(obstacleSpeed)
+            if(obstacle.checkIsValidPosition(height)){
+                handler.postDelayed({obstacle.reset_view()}, Random.nextLong(500,2000))
+                handler.postDelayed(this, Random.nextLong(500,2000))
+            }else {
+                handler.postDelayed(this, time_update)
             }
-        })
+            }
+    })
     }
 
 
+}
 
-    }
+
 

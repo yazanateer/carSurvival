@@ -4,29 +4,30 @@ import android.content.Context
 import android.widget.ImageView
 import android.widget.RelativeLayout
 
-class Obstacle(private val lane: Int, private val laneWidth: Float, context: Context) {
-    private val obstacleView: ImageView = ImageView(context)
+class Obstacle(private val obstacleView: ImageView, private val lane: Int , private val laneWidth: Float) {
+
     init{
-        obstacleView.setImageResource(R.drawable.rock_svgrepo_com) //the icon of the obstacle
-        obstacleView.layoutParams = RelativeLayout.LayoutParams(100, 100) // the size of the icon
-        setPosition()
+        obstacleView.post {
+            setPosition()
+        }
     }
 
     private fun setPosition() {
-        obstacleView.x = laneWidth * lane + (laneWidth - 100) / 2
-        obstacleView.y = -100f //set the start position of the obstacle in the top of the screen
+        obstacleView.x = laneWidth * lane + (laneWidth - obstacleView.width) / 2
     }
 
-    fun check_isValid_position(height_obstacle : Int): Boolean{
-        return obstacleView.y > height_obstacle
+
+    fun checkIsValidPosition(heightObstacle : Int): Boolean{
+        return obstacleView.y > heightObstacle
     }
 
-    fun move(obstacle_speed: Int) {
-        obstacleView.y +=  obstacle_speed
+    fun move(obstacleSpeed: Int) {
+        obstacleView.y +=  obstacleSpeed
 
     }
 
-    fun reset_view() {
+    fun reset_view() { //reset the obstacle to the top of the page
+        obstacleView.y = -obstacleView.height.toFloat()
         setPosition()
     }
 
