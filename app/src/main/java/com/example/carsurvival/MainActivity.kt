@@ -9,10 +9,7 @@ import android.os.Handler
 import android.os.Looper
 import com.google.android.material.imageview.ShapeableImageView
 import kotlin.random.Random
-import android.os.VibrationEffect
-import android.os.Vibrator
-import android.widget.Toast
-import android.content.Context
+
 
 class MainActivity : AppCompatActivity() {
 
@@ -35,6 +32,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        SignalManager.init(this)
         // Initialize mainLayout
         mainLayout = findViewById(R.id.main)
 
@@ -174,12 +172,14 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun notify_hit(){
-        Toast.makeText(this, "Car hit", Toast.LENGTH_SHORT).show() //show the message in the screen
-        val vibration = getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
-        if(vibration.hasVibrator()){
-            val effect = VibrationEffect.createOneShot(1000, VibrationEffect.DEFAULT_AMPLITUDE)
-            vibration.vibrate(effect)
-        }
+//        Toast.makeText(this, "Car hit", Toast.LENGTH_SHORT).show() //show the message in the screen
+//        val vibration = getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
+//        if(vibration.hasVibrator()){
+//            val effect = VibrationEffect.createOneShot(1000, VibrationEffect.DEFAULT_AMPLITUDE)
+//            vibration.vibrate(effect)
+//        }
 
+        SignalManager.getInstance().toast("Car hit")
+        SignalManager.getInstance().vibrate()
     }
 }
