@@ -9,7 +9,7 @@
     tools:context=".MainActivity">
 
     <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
-        android:id="@+id/floatingActionButton"
+        android:id="@+id/LeftButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:clickable="true"
@@ -22,7 +22,7 @@
       />
 
     <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
-        android:id="@+id/floatingActionButton2"
+        android:id="@+id/RightButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:clickable="true"
@@ -44,7 +44,7 @@
     android:layout_marginStart="25dp">
 
     <com.google.android.material.imageview.ShapeableImageView
-        android:id="@+id/imageView"
+        android:id="@+id/FirstHeart"
         android:layout_width="@dimen/heart_width"
         android:layout_height="@dimen/heart_height"
         app:srcCompat="@drawable/_99063_heart_icon"
@@ -52,7 +52,7 @@
          />
 
     <com.google.android.material.imageview.ShapeableImageView
-        android:id="@+id/imageView2"
+        android:id="@+id/SecondHeart"
         android:layout_width="@dimen/heart_width"
         android:layout_height="@dimen/heart_height"
         app:srcCompat="@drawable/_99063_heart_icon"
@@ -61,7 +61,7 @@
 
 
     <com.google.android.material.imageview.ShapeableImageView
-        android:id="@+id/imageView3"
+        android:id="@+id/ThirdHeart"
         android:layout_width="@dimen/heart_width"
         android:layout_height="@dimen/heart_height"
         app:srcCompat="@drawable/_99063_heart_icon"
@@ -70,7 +70,7 @@
 </androidx.appcompat.widget.LinearLayoutCompat>
 
     <com.google.android.material.imageview.ShapeableImageView
-        android:id="@+id/imageView4"
+        android:id="@+id/CarIcon"
         android:layout_width="150dp"
         android:layout_height="90dp"
         android:layout_alignParentBottom="true"
@@ -80,23 +80,23 @@
      />
 
     <com.google.android.material.imageview.ShapeableImageView
-        android:id="@+id/imageView5"
-        android:layout_width="90dp"
-        android:layout_height="90dp"
+        android:id="@+id/FirstObstacle"
+        android:layout_width="@dimen/obstacleWidth"
+        android:layout_height="@dimen/obstacleHeight"
         app:srcCompat="@drawable/rock_svgrepo_com"
        />
 
     <com.google.android.material.imageview.ShapeableImageView
-        android:id="@+id/imageView6"
-        android:layout_width="90dp"
-        android:layout_height="90dp"
+        android:id="@+id/SecondObstacle"
+        android:layout_width="@dimen/obstacleWidth"
+        android:layout_height="@dimen/obstacleHeight"
         app:srcCompat="@drawable/rock_svgrepo_com"
          />
 
     <com.google.android.material.imageview.ShapeableImageView
-        android:id="@+id/imageView7"
-        android:layout_width="90dp"
-        android:layout_height="90dp"
+        android:id="@+id/ThirdObstacle"
+        android:layout_width="@dimen/obstacleWidth"
+        android:layout_height="@dimen/obstacleHeight"
         app:srcCompat="@drawable/rock_svgrepo_com"
         />
 </RelativeLayout>
