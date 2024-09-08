@@ -79,7 +79,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun start_movement(height: Int) {
-        val obstacle_speed = 55
+        val obstacle_speed = 35
         val time_update = 50L
         val random_value = Random(System.currentTimeMillis())
 
@@ -169,17 +169,50 @@ class MainActivity : AppCompatActivity() {
             val lastHeart = hearts.removeAt(hearts.size - 1)
             lastHeart.setImageResource(0) // Remove the heart visually
         }
+        if(hearts.isEmpty()){
+            restartGame()
+        }
     }
 
     private fun notify_hit(){
-//        Toast.makeText(this, "Car hit", Toast.LENGTH_SHORT).show() //show the message in the screen
-//        val vibration = getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
-//        if(vibration.hasVibrator()){
-//            val effect = VibrationEffect.createOneShot(1000, VibrationEffect.DEFAULT_AMPLITUDE)
-//            vibration.vibrate(effect)
-//        }
-
         SignalManager.getInstance().toast("Car hit")
         SignalManager.getInstance().vibrate()
     }
+
+    private fun restartGame() {
+        handler.removeCallbacksAndMessages(null)
+
+        // Reset the car and obstacles positions
+        car.resetCar()
+        first_obstacle.reset_view()
+        second_obstacle.reset_view()
+        third_obstacle.reset_view()
+
+        // Reset collision flags
+        firstObstacleHit = false
+        secondObstacleHit = false
+        thirdObstacleHit = false
+
+        // Restore all hearts
+        restoreHearts()
+
+        // Start the movement again
+        mainLayout.post {
+            val layoutHeight = mainLayout.height
+            start_movement(layoutHeight) // Restart the obstacle movement
+        }
+    }
+
+    private fun restoreHearts() {
+        hearts.clear()
+        hearts.add(findViewById(R.id.imageView))
+        hearts.add(findViewById(R.id.imageView2))
+        hearts.add(findViewById(R.id.imageView3))
+
+        for (heart in hearts) {
+            heart.setImageResource(R.drawable._99063_heart_icon)
+        }
+    }
+
+
 }

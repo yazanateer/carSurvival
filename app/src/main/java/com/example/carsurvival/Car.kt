@@ -16,6 +16,10 @@ class Car(private val carView: ImageView, private val laneCount: Int) {
 
 
 
+    fun resetCar() {
+        currentLane = 1
+        updatePosition()
+    }
     fun moveLeft() { //move the car left
         if (currentLane > 0) {
             currentLane--
