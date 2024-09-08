@@ -1,7 +1,7 @@
 package com.example.carsurvival
 
-//import android.graphics.Rect
-//import android.view.View
+import android.graphics.Rect
+import android.view.View
 import android.widget.ImageView
 
 
@@ -43,18 +43,17 @@ class Car(private val carView: ImageView, private val laneCount: Int) {
     }
 
 
-//    fun checkCollision(objectView: View): Boolean { // Check if the car collides with the obstacles
-//        val carRect = Rect()
-//        carView.getHitRect(carRect)
-//
-//        val objectRect = Rect()
-//        objectView.getHitRect(objectRect)
-//
-//        return Rect.intersects(carRect, objectRect)
-//    }
+    fun isHit(objectView: View): Boolean { // Check if the car collides with the obstacles
+        val carRect = Rect()
+        carView.getHitRect(carRect)
+        val objectRect = Rect()
+        objectView.getHitRect(objectRect)
+
+        return Rect.intersects(carRect, objectRect)
+    }
 
 
-//    fun getView(): ImageView { //return the car view
-//        return carView
-//    }
+    fun getView(): ImageView { //return the car view
+        return carView
+    }
 }
