@@ -22,6 +22,13 @@ import android.hardware.SensorEventListener
 import android.hardware.SensorManager
 import android.widget.Button
 
+
+//to use for the sound effect
+import android.media.MediaPlayer
+import android.view.View
+import android.widget.TextView
+
+
 class MainActivity : AppCompatActivity(), SensorEventListener  {
 
     private lateinit var sensorManager: SensorManager
@@ -48,9 +55,31 @@ class MainActivity : AppCompatActivity(), SensorEventListener  {
     private var fourthHit = false
     private var fifthHit = false
 
+
+    //initialize for the odometer distance
+    private var distance_meters = 0
+    private lateinit var odometer: TextView
+
+    //initialize for the coins counter
+    private var coins_counter = 0
+    private lateinit var coins: TextView
+
+    //initialize the coin icon
+    private lateinit var coin_icon: ImageView
+
+    private var screenWidthh = 0
+
+
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        val displayMetrics = resources.displayMetrics
+        screenWidthh = displayMetrics.widthPixels
+
+
 
 //setups for the sensor accelerator
         sensorManager = getSystemService(SENSOR_SERVICE) as SensorManager
@@ -97,6 +126,30 @@ class MainActivity : AppCompatActivity(), SensorEventListener  {
         hearts.add(findViewById(R.id.SecondHeart))
         hearts.add(findViewById(R.id.ThirdHeart))
 
+
+        //the odometer distance
+        odometer = findViewById(R.id.distance)
+
+        //use the handler to update the distance
+        val handler = Handler(Looper.getMainLooper())
+        val runnable = object : Runnable {
+            override fun run() {
+                increase_distance()
+                handler.postDelayed(this, 1000) // Update distance every 1 second
+            }
+        }
+        handler.postDelayed(runnable, 1000)
+
+
+
+        //the coins couter
+        coins = findViewById(R.id.coins_counter)
+
+
+        //the coin icon
+        coin_icon = findViewById(R.id.coin_icon)
+
+
         // set the lane width and ensure the car is centered
         carView.post {
             car.setLaneWidth(screenWidth / 5f)
@@ -110,7 +163,7 @@ class MainActivity : AppCompatActivity(), SensorEventListener  {
         mainLayout.post {
             val layoutHeight = mainLayout.height
             start_movement(layoutHeight)
-        }
+         }
     }
 
 
@@ -153,6 +206,8 @@ class MainActivity : AppCompatActivity(), SensorEventListener  {
         val obstacle_speed = 35
         val time_update = 50L
         val random_value = Random(System.currentTimeMillis())
+        val time_spawn_coin = 3000L
+
 
         // move each obstacle
         handler.postDelayed({
@@ -174,7 +229,41 @@ class MainActivity : AppCompatActivity(), SensorEventListener  {
         handler.postDelayed({
             move(fifth_obstacle, obstacle_speed, height, time_update, ::fifthObstacleHandler)
         }, random_value.nextLong(2000, 6000))
+
+        handler.postDelayed(object: Runnable {
+            override fun run() {
+                spawn_coin(height)
+                handler.postDelayed(this ,time_spawn_coin)
+            }
+        }, time_spawn_coin)
+
     }
+
+
+    private fun spawn_coin(height: Int) {
+        val lane = screenWidthh / 5f
+        val generated_random_lane = Random.nextInt(5) //generate lane from the first to the fifth
+
+        coin_icon.x =  (lane / 2 + generated_random_lane * lane) - (coin_icon.width / 2)
+        coin_icon.y = -coin_icon.height.toFloat()
+
+        coin_icon.visibility = View.VISIBLE //change to visible to display the coin on the layout
+        coin_icon.animate()
+            .translationY(height.toFloat() + coin_icon.height)
+            .setDuration(2500)
+            .setUpdateListener { animation -> //to check if the coin hit the car and update the increase_coins
+                if (car.isHit(coin_icon)) {
+                    increase_coins()
+                    coin_icon.visibility = View.GONE // hide the coin after hit
+                    animation.cancel()
+                }
+            }
+            .withEndAction {
+                coin_icon.visibility = View.GONE //hide the coin after reach to the bottom
+            }
+            .start()
+    }
+
 
     private fun move(obstacle: Obstacle, obstacleSpeed: Int, height: Int, time_update: Long, Hit_obstacles: () -> Unit) {
         handler.post(object : Runnable {
@@ -262,6 +351,7 @@ class MainActivity : AppCompatActivity(), SensorEventListener  {
     }
 
     private fun notify_hit(){ //notify for the hit car ( toast msg and vibrator)
+        crash_sound()
         SignalManager.getInstance().toast("Car hit")
         SignalManager.getInstance().vibrate()
     }
@@ -309,6 +399,31 @@ class MainActivity : AppCompatActivity(), SensorEventListener  {
         startActivity(intent)
         finish()
     }
+
+
+    //to play the sound effect when the car hit
+    private fun crash_sound(){
+        val crash_sound = MediaPlayer.create(this, R.raw.crash) //the file from raw folder
+        crash_sound.start() //start the sound
+
+        crash_sound.setOnCompletionListener { c ->
+              c.release()
+        }
+    }
+
+    private fun increase_distance() {
+        distance_meters += 1 // Increment distance by 1 meter every second
+        odometer.text = "Distance: ${distance_meters}" //update the text on the layout screen
+    }
+
+    private fun increase_coins(){
+        coins_counter += 1
+        coins.text = "Coins: ${coins_counter}"
+    }
+
+
+
+
 
 
 

@@ -9,6 +9,28 @@
     android:background="@color/street"
     tools:context=".MainActivity">
 
+    <TextView
+        android:id="@+id/distance"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:text="Distance: 0"
+        android:textSize="30dp"
+        android:layout_centerHorizontal="true"
+        android:textColor="@color/white" />
+
+    <TextView
+        android:id="@+id/coins_counter"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="60dp"
+        android:text="Coins: 0"
+        android:textSize="30dp"
+        android:textColor="@color/white" />
+
+
+
 
     <View
         android:layout_width="2dp"
@@ -144,41 +166,6 @@
         android:layout_marginStart="320dp"
         android:layout_marginTop="50dp"
         android:background="#FFFFFF" />
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
     <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
@@ -287,6 +274,15 @@
         app:srcCompat="@drawable/rock_svgrepo_com"
         />
 
+
+
+    <com.google.android.material.imageview.ShapeableImageView
+        android:id="@+id/coin_icon"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        app:srcCompat="@drawable/coin_svgrepo_com"
+        android:visibility="gone"
+        />
 
 
 
