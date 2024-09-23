@@ -179,6 +179,7 @@
         android:contentDescription="left"
         android:backgroundTint="@color/pink"
         app:icon="@drawable/baseline_arrow_left_24"
+        android:visibility="visible"
       />
 
     <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
@@ -193,6 +194,7 @@
         android:contentDescription="right"
         android:backgroundTint="@color/pink"
         app:icon="@drawable/baseline_arrow_right_24"
+        android:visibility="visible"
          />
 
 <androidx.appcompat.widget.LinearLayoutCompat

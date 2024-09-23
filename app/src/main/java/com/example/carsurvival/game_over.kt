@@ -15,7 +15,7 @@ class game_over : AppCompatActivity() {
 
         val restart_button = findViewById<Button>(R.id.restart_button) //the button which restart the game
         restart_button.setOnClickListener{
-            val intent_gameOver = Intent(this, MainActivity::class.java)
+            val intent_gameOver = Intent(this, MenuActivity::class.java)
             startActivity(intent_gameOver) //to run the game again
             finish()
 

@@ -1,32 +1,28 @@
 package com.example.carsurvival
 
-import android.content.Intent
-import android.os.Bundle
-import android.widget.ImageView
-import androidx.appcompat.app.AppCompatActivity
-import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
-import android.widget.RelativeLayout
-import android.os.Handler
-import android.os.Looper
-import com.google.android.material.imageview.ShapeableImageView
-import kotlin.random.Random
-
-
-
-
 
 //import libraries for the sensor Tilt
+
+
+//to use for the sound effect
+import android.content.Intent
 import android.hardware.Sensor
 import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
 import android.hardware.SensorManager
-import android.widget.Button
-
-
-//to use for the sound effect
 import android.media.MediaPlayer
+import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
+import android.util.Log
 import android.view.View
+import android.widget.ImageView
+import android.widget.RelativeLayout
 import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
+import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+import com.google.android.material.imageview.ShapeableImageView
+import kotlin.random.Random
 
 
 class MainActivity : AppCompatActivity(), SensorEventListener  {
@@ -69,7 +65,7 @@ class MainActivity : AppCompatActivity(), SensorEventListener  {
 
     private var screenWidthh = 0
 
-
+    private var speed_mode: Int = 0
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -79,14 +75,16 @@ class MainActivity : AppCompatActivity(), SensorEventListener  {
         val displayMetrics = resources.displayMetrics
         screenWidthh = displayMetrics.widthPixels
 
+        val gameMode = intent.getStringExtra("Mode") //this the extra input from the intent from the menuActivity
+        //for the selection the mode of the game ( fast, slow, sensor )
+
+
 
 
 //setups for the sensor accelerator
         sensorManager = getSystemService(SENSOR_SERVICE) as SensorManager
         accelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER)
         sensorManager.registerListener(this, accelerometer, SensorManager.SENSOR_DELAY_GAME)
-
-
 
 
         SignalManager.init(this) //init the signalManager file to use it for tht Toast msg and the vibration
@@ -130,6 +128,20 @@ class MainActivity : AppCompatActivity(), SensorEventListener  {
         //the odometer distance
         odometer = findViewById(R.id.distance)
 
+
+    //to adjust the screen according to the chosen game mode
+        if (gameMode == "fast"){
+            speed_mode = 80
+        } else if(gameMode == "slow"){
+            speed_mode = 20
+        } else {
+            speed_mode = 35
+            rightButton.visibility = View.GONE //to hide the buttons if chosen the sensor mode
+            leftButton.visibility = View.GONE
+        }
+
+
+
         //use the handler to update the distance
         val handler = Handler(Looper.getMainLooper())
         val runnable = object : Runnable {
@@ -170,20 +182,21 @@ class MainActivity : AppCompatActivity(), SensorEventListener  {
     override fun onSensorChanged(event: SensorEvent?) {
         event?.let {
             if (it.sensor.type == Sensor.TYPE_ACCELEROMETER) {
-                handleTilt(it.values[0])
+                handleTilt(it.values)
             }
         }
     }
 
     override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) {
-        // Can be left empty
+
     }
 
-    private fun handleTilt(x: Float) {
-        if (x < -2) { // Tilt to the left
-            car.moveLeft()
-        } else if (x > 2) { // Tilt to the right
-            car.moveRight()
+    private fun handleTilt(values: FloatArray) {
+        val y_Tilt = values[0]
+        if (y_Tilt > 2) { // Device tilted forward
+            car.moveLeft() // Move car left
+        } else if (y_Tilt < -2) { // Device tilted backward
+            car.moveRight() // Move car right
         }
     }
 
@@ -203,7 +216,7 @@ class MainActivity : AppCompatActivity(), SensorEventListener  {
 
 
     private fun start_movement(height: Int) { //start the movement of the obstacles on the screen
-        val obstacle_speed = 35
+        val obstacle_speed = speed_mode
         val time_update = 50L
         val random_value = Random(System.currentTimeMillis())
         val time_spawn_coin = 3000L
@@ -240,29 +253,7 @@ class MainActivity : AppCompatActivity(), SensorEventListener  {
     }
 
 
-    private fun spawn_coin(height: Int) {
-        val lane = screenWidthh / 5f
-        val generated_random_lane = Random.nextInt(5) //generate lane from the first to the fifth
 
-        coin_icon.x =  (lane / 2 + generated_random_lane * lane) - (coin_icon.width / 2)
-        coin_icon.y = -coin_icon.height.toFloat()
-
-        coin_icon.visibility = View.VISIBLE //change to visible to display the coin on the layout
-        coin_icon.animate()
-            .translationY(height.toFloat() + coin_icon.height)
-            .setDuration(2500)
-            .setUpdateListener { animation -> //to check if the coin hit the car and update the increase_coins
-                if (car.isHit(coin_icon)) {
-                    increase_coins()
-                    coin_icon.visibility = View.GONE // hide the coin after hit
-                    animation.cancel()
-                }
-            }
-            .withEndAction {
-                coin_icon.visibility = View.GONE //hide the coin after reach to the bottom
-            }
-            .start()
-    }
 
 
     private fun move(obstacle: Obstacle, obstacleSpeed: Int, height: Int, time_update: Long, Hit_obstacles: () -> Unit) {
@@ -421,6 +412,30 @@ class MainActivity : AppCompatActivity(), SensorEventListener  {
         coins.text = "Coins: ${coins_counter}"
     }
 
+
+    private fun spawn_coin(height: Int) {
+        val lane = screenWidthh / 5f
+        val generated_random_lane = Random.nextInt(5) //generate lane from the first to the fifth
+
+        coin_icon.x =  (lane / 2 + generated_random_lane * lane) - (coin_icon.width / 2)
+        coin_icon.y = -coin_icon.height.toFloat()
+
+        coin_icon.visibility = View.VISIBLE //change to visible to display the coin on the layout
+        coin_icon.animate()
+            .translationY(height.toFloat() + coin_icon.height)
+            .setDuration(2500)
+            .setUpdateListener { animation -> //to check if the coin hit the car and update the increase_coins
+                if (car.isHit(coin_icon)) {
+                    increase_coins()
+                    coin_icon.visibility = View.GONE // hide the coin after hit
+                    animation.cancel()
+                }
+            }
+            .withEndAction {
+                coin_icon.visibility = View.GONE //hide the coin after reach to the bottom
+            }
+            .start()
+    }
 
 
 
