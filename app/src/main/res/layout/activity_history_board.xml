@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".HistoryBoardActivity">
+
+    <TextView
+        android:id="@+id/title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/black"
+        android:textSize="26dp"
+        android:text="top 10 scores"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="18dp" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/scores_recyclerView"
+        android:layout_width="match_parent"
+        android:layout_below="@id/title"
+        android:layout_marginStart="140dp"
+        android:layout_marginTop="15dp"
+        android:layout_height="0dp"
+        android:layout_above="@id/map_container"/>
+
+
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/map_container"
+        android:layout_width="match_parent"
+        android:name="com.google.android.gms.maps.SupportMapFragment"
+        android:layout_height="300dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        />
+
+
+
+
+</RelativeLayout>

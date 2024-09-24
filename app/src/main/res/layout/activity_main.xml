@@ -6,7 +6,167 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/street"
     tools:context=".MainActivity">
+
+    <TextView
+        android:id="@+id/distance"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:text="Distance: 0"
+        android:textSize="30dp"
+        android:layout_centerHorizontal="true"
+        android:textColor="@color/white" />
+
+    <TextView
+        android:id="@+id/coins_counter"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="60dp"
+        android:text="Coins: 0"
+        android:textSize="30dp"
+        android:textColor="@color/white" />
+
+
+
+
+    <View
+        android:layout_width="2dp"
+        android:layout_height="80dp"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="80dp"
+        android:layout_marginTop="650dp"
+        android:background="#FFFFFF" />
+
+    <View
+        android:layout_width="2dp"
+        android:layout_height="80dp"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="80dp"
+        android:layout_marginTop="450dp"
+        android:background="#FFFFFF" />
+
+    <View
+        android:layout_width="2dp"
+        android:layout_height="80dp"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="80dp"
+        android:layout_marginTop="250dp"
+        android:background="#FFFFFF" />
+
+
+    <View
+        android:layout_width="2dp"
+        android:layout_height="80dp"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="80dp"
+        android:layout_marginTop="50dp"
+        android:background="#FFFFFF" />
+
+
+    <View
+        android:layout_width="2dp"
+        android:layout_height="80dp"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="160dp"
+        android:layout_marginTop="650dp"
+        android:background="#FFFFFF" />
+
+    <View
+        android:layout_width="2dp"
+        android:layout_height="80dp"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="160dp"
+        android:layout_marginTop="450dp"
+        android:background="#FFFFFF" />
+
+    <View
+        android:layout_width="2dp"
+        android:layout_height="80dp"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="160dp"
+        android:layout_marginTop="250dp"
+        android:background="#FFFFFF" />
+
+
+    <View
+        android:layout_width="2dp"
+        android:layout_height="80dp"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="160dp"
+        android:layout_marginTop="50dp"
+        android:background="#FFFFFF" />
+
+    <View
+        android:layout_width="2dp"
+        android:layout_height="80dp"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="240dp"
+        android:layout_marginTop="650dp"
+        android:background="#FFFFFF" />
+
+    <View
+        android:layout_width="2dp"
+        android:layout_height="80dp"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="240dp"
+        android:layout_marginTop="450dp"
+        android:background="#FFFFFF" />
+
+    <View
+        android:layout_width="2dp"
+        android:layout_height="80dp"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="240dp"
+        android:layout_marginTop="250dp"
+        android:background="#FFFFFF" />
+
+
+    <View
+        android:layout_width="2dp"
+        android:layout_height="80dp"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="240dp"
+        android:layout_marginTop="50dp"
+        android:background="#FFFFFF" />
+
+
+
+    <View
+        android:layout_width="2dp"
+        android:layout_height="80dp"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="320dp"
+        android:layout_marginTop="650dp"
+        android:background="#FFFFFF" />
+
+    <View
+        android:layout_width="2dp"
+        android:layout_height="80dp"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="320dp"
+        android:layout_marginTop="450dp"
+        android:background="#FFFFFF" />
+
+    <View
+        android:layout_width="2dp"
+        android:layout_height="80dp"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="320dp"
+        android:layout_marginTop="250dp"
+        android:background="#FFFFFF" />
+
+
+    <View
+        android:layout_width="2dp"
+        android:layout_height="80dp"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="320dp"
+        android:layout_marginTop="50dp"
+        android:background="#FFFFFF" />
+
 
     <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
         android:id="@+id/LeftButton"
@@ -19,6 +179,7 @@
         android:contentDescription="left"
         android:backgroundTint="@color/pink"
         app:icon="@drawable/baseline_arrow_left_24"
+        android:visibility="visible"
       />
 
     <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
@@ -33,6 +194,7 @@
         android:contentDescription="right"
         android:backgroundTint="@color/pink"
         app:icon="@drawable/baseline_arrow_right_24"
+        android:visibility="visible"
          />
 
 <androidx.appcompat.widget.LinearLayoutCompat
@@ -71,8 +233,8 @@
 
     <com.google.android.material.imageview.ShapeableImageView
         android:id="@+id/CarIcon"
-        android:layout_width="150dp"
-        android:layout_height="90dp"
+        android:layout_width="90dp"
+        android:layout_height="50dp"
         android:layout_alignParentBottom="true"
         android:layout_centerInParent="true"
         android:layout_marginBottom="80dp"
@@ -90,6 +252,7 @@
         android:id="@+id/SecondObstacle"
         android:layout_width="@dimen/obstacleWidth"
         android:layout_height="@dimen/obstacleHeight"
+
         app:srcCompat="@drawable/rock_svgrepo_com"
          />
 
@@ -99,4 +262,30 @@
         android:layout_height="@dimen/obstacleHeight"
         app:srcCompat="@drawable/rock_svgrepo_com"
         />
+    <com.google.android.material.imageview.ShapeableImageView
+        android:id="@+id/FourthObstacle"
+        android:layout_width="@dimen/obstacleWidth"
+        android:layout_height="@dimen/obstacleHeight"
+        app:srcCompat="@drawable/rock_svgrepo_com"
+        />
+
+    <com.google.android.material.imageview.ShapeableImageView
+        android:id="@+id/FifthObstacle"
+        android:layout_width="@dimen/obstacleWidth"
+        android:layout_height="@dimen/obstacleHeight"
+        app:srcCompat="@drawable/rock_svgrepo_com"
+        />
+
+
+
+    <com.google.android.material.imageview.ShapeableImageView
+        android:id="@+id/coin_icon"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        app:srcCompat="@drawable/coin_svgrepo_com"
+        android:visibility="gone"
+        />
+
+
+
 </RelativeLayout>

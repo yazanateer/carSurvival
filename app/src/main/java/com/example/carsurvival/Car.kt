@@ -6,16 +6,16 @@ import android.widget.ImageView
 
 
 
-                ////////////| The position: Left - 0  | Center - 1 | Right - 2 |\\\\\\\\\\\\\\\
-
+                ////////////| The position:    0    |    1    |    2    |   3   |  4   \\\\\\\\\\\\\\\\\\\
+//                                                  Left         center         Right
 
 class Car(private val carView: ImageView, private val laneCount: Int) {
 
-    private var currentLane: Int = 1 //the default position start in center
-    private var laneWidth: Float = 0f // each lane in the screen ( 3 lanes )
+    private var currentLane: Int = 2 //the default position start in center
+    private var laneWidth: Float = 0f // each lane in the screen ( 5 lanes )
 
     fun resetCar() {
-        currentLane = 1 //the car start in the center lane
+        currentLane = 2 //the car start in the center lane
         updatePosition()
     }
     fun moveLeft() { //move the car one lane left
