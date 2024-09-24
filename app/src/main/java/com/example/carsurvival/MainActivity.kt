@@ -220,11 +220,11 @@ class MainActivity : AppCompatActivity(), SensorEventListener  {
     }
 
     private fun handleTilt(values: FloatArray) {
-        val y_Tilt = values[0]
-        if (y_Tilt > 2) { // Device tilted forward
-            car.moveLeft() // Move car left
-        } else if (y_Tilt < -2) { // Device tilted backward
-            car.moveRight() // Move car right
+        val xTilt = values[0] // Tilt on the X-axis (left/right movement)
+        if (xTilt > 1) { //left
+            car.moveLeft()
+        } else if (xTilt < -1) {
+            car.moveRight() //right
         }
     }
 
@@ -381,7 +381,7 @@ class MainActivity : AppCompatActivity(), SensorEventListener  {
                 ScoreManagerSingleton.insert_score(score_m, location) // Use the location
             } else {
                 Log.d("MainActivity", "Location not available, inserting score without location.")
-                ScoreManagerSingleton.insert_score(score_m, LatLng(133.23140, 53.21340))  // Insert default location or handle it
+                ScoreManagerSingleton.insert_score(score_m, LatLng(32.0968509,34.6317778))  // Insert default location or handle it
             }
 
             // Proceed with restarting the game
@@ -493,10 +493,13 @@ class MainActivity : AppCompatActivity(), SensorEventListener  {
             }
         } else {
             // Request permission if not granted
-            ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), 1)
+            ActivityCompat.requestPermissions(
+                this,
+                arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
+                1
+            )
         }
     }
-
 
 
 
