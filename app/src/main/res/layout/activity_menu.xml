@@ -53,6 +53,18 @@
         android:layout_marginEnd="20dp"
         />
 
+    <Button
+        android:id="@+id/history_board"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="History Board"
+        android:textSize="20dp"
+        android:layout_below="@id/select_mode"
+        android:layout_marginTop="240dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        />
+
 
 
 </RelativeLayout>

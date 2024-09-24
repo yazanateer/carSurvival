@@ -6,6 +6,7 @@ package com.example.carsurvival
 
 //to use for the sound effect
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.hardware.Sensor
 import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
@@ -14,15 +15,20 @@ import android.media.MediaPlayer
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.util.Log
 import android.view.View
 import android.widget.ImageView
 import android.widget.RelativeLayout
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
 import com.google.android.material.imageview.ShapeableImageView
 import kotlin.random.Random
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationServices
+import com.google.android.gms.maps.model.LatLng
+import android.Manifest
+import android.util.Log
 
 
 class MainActivity : AppCompatActivity(), SensorEventListener  {
@@ -66,6 +72,11 @@ class MainActivity : AppCompatActivity(), SensorEventListener  {
     private var screenWidthh = 0
 
     private var speed_mode: Int = 0
+
+    private lateinit var fusedLocationClient: FusedLocationProviderClient
+    private var Location_map: LatLng? = null
+
+
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -141,6 +152,23 @@ class MainActivity : AppCompatActivity(), SensorEventListener  {
         }
 
 
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
+
+        // Request location permissions if needed
+        if (ActivityCompat.checkSelfPermission(
+                this,
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+                this,
+                Manifest.permission.ACCESS_COARSE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            ActivityCompat.requestPermissions(
+                this,
+                arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
+                1
+            )
+        }
 
         //use the handler to update the distance
         val handler = Handler(Looper.getMainLooper())
@@ -254,8 +282,6 @@ class MainActivity : AppCompatActivity(), SensorEventListener  {
 
 
 
-
-
     private fun move(obstacle: Obstacle, obstacleSpeed: Int, height: Int, time_update: Long, Hit_obstacles: () -> Unit) {
         handler.post(object : Runnable {
             override fun run() {
@@ -337,7 +363,7 @@ class MainActivity : AppCompatActivity(), SensorEventListener  {
             lastHeart.setImageResource(0) // Remove the heart image from the screen
         }
         if(hearts.isEmpty()){ //if the three hearts removed then will start a new game
-            restartGame()
+            restartGame(distance_meters)
         }
     }
 
@@ -349,30 +375,44 @@ class MainActivity : AppCompatActivity(), SensorEventListener  {
 
 
     //satrt the game again
-    private fun restartGame() {
-        restart_game()
-        handler.removeCallbacksAndMessages(null)
+    private fun restartGame(score_m: Int) {
+        getLocation { location ->
+            if (location != null) {
+                ScoreManagerSingleton.insert_score(score_m, location) // Use the location
+            } else {
+                Log.d("MainActivity", "Location not available, inserting score without location.")
+                ScoreManagerSingleton.insert_score(score_m, LatLng(133.23140, 53.21340))  // Insert default location or handle it
+            }
 
-        car.resetCar()
-        first_obstacle.reset_view()
-        second_obstacle.reset_view()
-        third_obstacle.reset_view()
-        fourth_obstacle.reset_view()
-        fifth_obstacle.reset_view()
+            // Proceed with restarting the game
+            val intent = Intent(this, HistoryBoardActivity::class.java)
+            startActivity(intent)
+            finish()
 
-        firstHit = false
-        secondHit = false
-        thirdHit = false
-        fourthHit = false
-        fifthHit = false
+            restart_game()
+            handler.removeCallbacksAndMessages(null)
 
-        restoreHearts()
+            // Reset game state
+            car.resetCar()
+            first_obstacle.reset_view()
+            second_obstacle.reset_view()
+            third_obstacle.reset_view()
+            fourth_obstacle.reset_view()
+            fifth_obstacle.reset_view()
 
-        mainLayout.post {
-            val layoutHeight = mainLayout.height
-            start_movement(layoutHeight) // Restart the obstacle movement
+            firstHit = false
+            secondHit = false
+            thirdHit = false
+            fourthHit = false
+            fifthHit = false
+
+            restoreHearts()
+
+            mainLayout.post {
+                val layoutHeight = mainLayout.height
+                start_movement(layoutHeight) // Restart the obstacle movement
+            }
         }
-
     }
 
     private fun restoreHearts() { //recover the three hearts to the screen
@@ -437,7 +477,25 @@ class MainActivity : AppCompatActivity(), SensorEventListener  {
             .start()
     }
 
-
+    private fun getLocation(onLocationReceived: (LatLng?) -> Unit) {
+        if (ActivityCompat.checkSelfPermission(
+                this,
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ) == PackageManager.PERMISSION_GRANTED
+        ) {
+            fusedLocationClient.lastLocation.addOnSuccessListener { location ->
+                if (location != null) {
+                    val latLng = LatLng(location.latitude, location.longitude)
+                    onLocationReceived(latLng) // This invokes the callback function
+                } else {
+                    onLocationReceived(null)  // Invokes the callback with null if no location is found
+                }
+            }
+        } else {
+            // Request permission if not granted
+            ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), 1)
+        }
+    }
 
 
 

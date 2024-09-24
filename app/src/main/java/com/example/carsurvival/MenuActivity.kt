@@ -16,6 +16,7 @@ class MenuActivity : AppCompatActivity() {
         val fast_button = findViewById<Button>(R.id.button_fast)
         val slow_button = findViewById<Button>(R.id.button_slow)
         val sensor_mode = findViewById<Button>(R.id.sensor_mode)
+        val history_boardd = findViewById<Button>(R.id.history_board)
 
         fast_button.setOnClickListener {
             val fast_button_intent = Intent(this, MainActivity::class.java)
@@ -42,7 +43,11 @@ class MenuActivity : AppCompatActivity() {
             finish()
         }
 
-
+        history_boardd.setOnClickListener {
+            val history_board_intent = Intent(this, HistoryBoardActivity::class.java)
+            startActivity(history_board_intent)
+            finish()
+        }
 
 
     }
